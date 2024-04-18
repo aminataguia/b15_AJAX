@@ -36,10 +36,10 @@
 
       async function display(selectedModel) {
         var image = await fetch(
-          `http://aminab15-cluestering.evbtfycyb7g8ekas.francecentral.azurecontainer.io:8000/model/${selectedModel}`
+          `http://aminab15-cluestering.francecentral.azurecontainer.io:8000/model/${selectedModel}`
         );
         var metric = await fetch(
-          `http://aminab15-cluestering.evbtfycyb7g8ekas.francecentral.azurecontainer.io:8000/metric/${selectedModel}`
+          `http://aminab15-cluestering.francecentral.azurecontainer.io:8000/metric/${selectedModel}`
         ).then((response) => {
           return response.text();
         });
