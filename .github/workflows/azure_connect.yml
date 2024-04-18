@@ -21,6 +21,7 @@ jobs:
 
     - name: build and push images
       run: |
+        cd backend
         docker build -t b15_docker .
         docker tag b15_docker:latest aminab15.azurecr.io/b15_docker:v1
         docker push aminab15.azurecr.io/b15_docker:v1
