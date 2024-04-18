@@ -1,0 +1,41 @@
+on: [push]
+
+name: Run Azure Login With a Service Principal Secret
+
+jobs:
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: azure acr login
+      run: |
+        az acr login --name aminab15
+
+    - name: build and push images
+      run: |
+        docker build -t b15_docker .
+        docker tag b15_docker:latest aminab15.azurecr.io/b15_docker:v1
+        docker push aminab15.azurecr.io/b15_docker:v1
+    
+    - name: Azure CLI script
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az container delete --name aminab15-ajax --resource-group gr_aminab15 --yes
+          az container create --resource-group gr_aminab15 --name aminab15-ajax \
+            --image aminab15.azurecr.io/b15_docker:v1 \
+            --cpu 1 --memory 1 \
+            --ports 8000 \
+            --dns-name-label aminab15-cluestering \
+            --registry-login-server aminab15.azurecr.io \
+            --registry-username aminab15 \
+            --registry-password ${{ secrets.AZURE_REGISTRY }}
