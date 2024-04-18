@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>main_page</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='styles.css') }}">
+</head>
+<body>
+
+
+    <!-- choose model  -->
+
+    <H1>Bienvenue sur AJAX Clustering</H1>
+    <select  name="model" id="model">
+        <option value="">--Please choose an model--</option>
+        <option c value="K_means">K_means</option>
+        <option value="DBSCAN">DBSCAN</option>
+        <option value="Agglomerative">Agglomerative</option>
+    </select>
+
+
+    <div class="result">
+        <p id="metrics">metrics</p>
+        <img id="img" src="" alt="Mon image">
+        
+    </div>
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
+    <script>
+
+        document.getElementById("model").addEventListener("change", function() {
+                    var selectedModel = this.value;
+                    display (selectedModel);
+        });
+
+        async function display (selectedModel){
+      
+            var image = await fetch(`http://127.0.0.1:8000/model/${selectedModel}`);
+            var metric = await fetch(`http://127.0.0.1:8000/metric/${selectedModel}`).then(response=> {return response.text()});
+
+            var imagejavascript = document.getElementById("img");
+            var metrics = document.getElementById("metrics");
+
+            imagejavascript.src = image.url;
+            metrics.innerText = metric;
+      
+        }
+
+    </script>
+</body>
+</html>
