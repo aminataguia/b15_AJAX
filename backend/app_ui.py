@@ -1,70 +1,41 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse,FileResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-
-import uvicorn 
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 import os
-import sys 
 
+app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-
-
-app=FastAPI()
-
-
-# load css et template 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
-
-# load images 
-
-# Chemin complet vers le dossier d'images et de metriques 
-# images_folder = os.path.join(os.getcwd(), "images")
-# metrics_folder = os.path.join(os.getcwd(), "metriques")
-# images_folder = r"C:\Users\Utilisateur\Desktop\projets\briefs\b15\github\AJAX-clustering/images"
-# metrics_folder =r"C:\Users\Utilisateur\Desktop\projets\briefs\b15\github\AJAX-clustering/metriques"
 images_folder = "./images"
-metrics_folder ="./metriques"
+metrics_folder = "./metriques"
 
-# Liste des fichiers avec l'extension .png dans le dossier d'images
-adresse_image = [images_folder+"/"+file for file in os.listdir(images_folder) if file.endswith(".png")]
+adresse_image = [os.path.join(images_folder, file) for file in os.listdir(images_folder) if file.endswith(".png")]
+adresse_metrics = [os.path.join(metrics_folder, file) for file in os.listdir(metrics_folder) if file.endswith(".txt")]
 
-# adresse_image = [file for file in os.listdir("./images/") if file.split(".")[-1]=="png"]
-print(f"taille du fichier d'adresse image : {len(adresse_image)}")
-
-# load metrics
-# adresse_metrics = [ file for file in os.listdir("./metriques/") if file.split(".")[-1]=="txt"]
-adresse_metrics = [metrics_folder+"/"+file for file in os.listdir(metrics_folder) if file.endswith(".txt")]
-print(f"taille du fichier d'adresse metrics : {len(adresse_metrics)}")
-
-
-
-
-# Main page 
-@app.get("/")
-async def main_page(request: Request):
-    return templates.TemplateResponse("main_page.html",{"request": request})
-
-
-# get image
 @app.get("/model/{model}")
-async def collect_data(model):
-    image = [x for x in adresse_image if  model in x ][0]
-    return  FileResponse(image, media_type="image/png")
+async def collect_data(model: str):
+    print(model)
 
+    image_path = next((x for x in adresse_image if model in x), None)
+    if image_path is None:
+        raise HTTPException(status_code=404, detail="Image not found")
+    return FileResponse(image_path, media_type="image/png")
 
-# get metrics
 @app.get("/metric/{model}")
-async def collect_data(model):
-    metric = [x for x in adresse_metrics if  model in x ][0]
-    # return "mse"
-    return FileResponse(metric, media_type="text/html")
+async def collect_metrics(model: str):
+    metric_path = next((x for x in adresse_metrics if model in x), None)
+    if metric_path is None:
+        raise HTTPException(status_code=404, detail="Metric not found")
+    return FileResponse(metric_path, media_type="text/html")
 
-
-
-
-if __name__=="__main__" : 
-    uvicorn.run(app) 
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 

@@ -4,12 +4,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>main_page</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', path='styles.css') }}"
-    />
+    <title>Ajax Clustering</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+
   </head>
   <body>
     <!-- choose model  -->
@@ -35,15 +32,16 @@
       });
 
       async function display(selectedModel) {
-        var image = await fetch(
-          `http://aminab15-cluestering.francecentral.azurecontainer.io:8000/model/${selectedModel}`
-        );
-        var metric = await fetch(
-          `http://aminab15-cluestering.francecentral.azurecontainer.io:8000/metric/${selectedModel}`
-        ).then((response) => {
-          return response.text();
-        });
-
+    var image = await fetch(
+      `http://127.0.0.1:8000/model/${selectedModel}`
+    );
+    var metric = await fetch(
+      `http://127.0.0.1:8000/metric/${selectedModel}`
+    ).then((response) => {
+      return response.text()
+    });
+// http://aminab15-cluestering.francecentral.azurecontainer.io:8000/model/${selectedModel}
+//http://aminab15-cluestering.francecentral.azurecontainer.io:8000/metric/${selectedModel}
         var imagejavascript = document.getElementById("img");
         var metrics = document.getElementById("metrics");
 
