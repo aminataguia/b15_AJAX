@@ -33,9 +33,12 @@ jobs:
       - name: build and push images
         run: |
           cd backend
-          docker build -t b15_docker .
-          docker tag b15_docker:latest aminab15.azurecr.io/b15_docker:v1
-          docker push aminab15.azurecr.io/b15_docker:v1
+          docker build -t b15front .
+          docker build -t b15back .
+          docker tag b15front:latest aminab15.azurecr.io/b15front:v1
+          docker tag b15back:latest aminab15.azurecr.io/b15back:v1
+          docker push aminab15.azurecr.io/b15front:v1
+          docker push aminab15.azurecr.io/b15back:v1
 
       - name: Azure CLI script
         uses: azure/CLI@v1
@@ -44,10 +47,20 @@ jobs:
           inlineScript: |
             az container delete --name aminab15-ajax --resource-group gr_aminab15 --yes
             az container create --resource-group gr_aminab15 --name aminab15-ajax \
-              --image aminab15.azurecr.io/b15_docker:v1 \
+              --image aminab15.azurecr.io/b15front:v1 \
               --cpu 1 --memory 1 \
               --ports 8000 \
               --dns-name-label aminab15-cluestering \
               --registry-login-server aminab15.azurecr.io \
               --registry-username aminab15 \
               --registry-password ${{ secrets.AZURE_REGISTRY }}
+
+            az container delete --name aminab15-ajax --resource-group gr_aminab15 --yes
+            az container create --resource-group gr_aminab15 --name aminab15-ajax \
+              --image aminab15.azurecr.io/b15back:v1 \
+              --cpu 1 --memory 1 \
+              --ports 8000 \
+              --dns-name-label aminab15-cluestering \
+              --registry-login-server aminab15.azurecr.io \
+              --registry-username aminab15 \
+              --registry-password ${{ secrets.AZURE_CREDENTIALS }}
