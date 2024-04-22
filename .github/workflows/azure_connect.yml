@@ -30,8 +30,8 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          docker build -t aminab15.azurecr.io/b15front:v1 -f Dockerfile .
-          docker build -t aminab15.azurecr.io/b15back:v1 -f Dockerfile .
+          docker build -t aminab15.azurecr.io/b15front:v1 .
+          docker build -t aminab15.azurecr.io/b15back:v1 .
           docker push aminab15.azurecr.io/b15front:v1
           docker push aminab15.azurecr.io/b15back:v1
 
