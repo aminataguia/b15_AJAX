@@ -5,7 +5,7 @@ FROM python:3.11-alpine
 WORKDIR /frontend
 
 # Assurez-vous que le fichier requirements.txt est dans le répertoire de travail
-COPY ./requirements.txt /front/requirements.txt
+COPY ./requirements.txt /frontend/requirements.txt
 
 # Installez les dépendances de l'application
 RUN pip install --no-cache-dir -r requirements.txt
