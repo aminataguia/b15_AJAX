@@ -46,8 +46,8 @@ jobs:
               --ports 8000 \
               --dns-name-label aminab15-front-clustering \
               --registry-login-server aminab15.azurecr.io \
-              --registry-username ${{ secrets.AZURE_REGISTRY_USERNAME }} \
-              --registry-password ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+              --registry-username aminab15 \
+              --registry-password ${{ secrets.AZURE_REGISTRY }}
 
             az container create --resource-group gr_aminab15 --name aminab15-back \
               --image aminab15.azurecr.io/b15back:v1 \
@@ -55,5 +55,5 @@ jobs:
               --ports 8000 \
               --dns-name-label aminab15-back-clustering \
               --registry-login-server aminab15.azurecr.io \
-              --registry-username ${{ secrets.AZURE_REGISTRY_USERNAME }} \
-              --registry-password ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+              --registry-username aminab15 \
+              --registry-password ${{ secrets.AZURE_REGISTRY }}
