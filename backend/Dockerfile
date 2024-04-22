@@ -1,7 +1,7 @@
 # Utilisez une image officielle Python comme base
 FROM python:3.11-alpine
 
-
+WORKDIR backend
 # Copiez le reste des fichiers de l'application dans le répertoire de travail
 COPY . .
 
