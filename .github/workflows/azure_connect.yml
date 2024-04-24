@@ -43,7 +43,7 @@ jobs:
             az container create --resource-group gr_aminab15 --name aminab15-front \
               --image aminab15.azurecr.io/b15front:v1 \
               --cpu 1 --memory 1 \
-              --ports 8000 \
+              --ports 80 \
               --dns-name-label aminab15-front-clustering \
               --registry-login-server aminab15.azurecr.io \
               --registry-username aminab15 \
