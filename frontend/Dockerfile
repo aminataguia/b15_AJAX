@@ -1,5 +1,5 @@
 # Utilisez une image officielle Python comme base
-FROM python:3.11-alpine
+FROM python:3.10-alpine
 
 # Définissez le répertoire de travail
 WORKDIR /frontend
@@ -11,8 +11,8 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Exposez le port sur lequel le serveur sera démarré
-EXPOSE 8001
+EXPOSE 80
 
 # Commande pour démarrer l'application
-CMD ["python3", "-m", "http.server", "8001"]
+CMD ["python3", "-m", "http.server", "80"]
 
