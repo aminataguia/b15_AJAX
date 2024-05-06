@@ -22,6 +22,7 @@ Templates : Un dossier contenant les fichiers HTML pour les différentes pages d
 Autres fichiers
 .git : Le dossier .git pour le suivi de version Git.
 README.md : Un fichier README détaillant le projet, les instructions d'installation et d'utilisation, ainsi que toute autre information pertinente.
-Conclusion
+.github
+veuillez retrouver dans github le dossier workflow contenant le deploiement sous format yams 
 
 
